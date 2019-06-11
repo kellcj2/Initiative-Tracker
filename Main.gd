@@ -5,59 +5,164 @@ class CustomSorter:
 	# @param: 2 Character nodes to be compared
 	# @desc: compares the Init value of the nodes
 	# @return: boolean, T if first > second
-	static func sort(a, b):
-		var first = int(a.get_node("Character/Init").text)
-		var second = int(b.get_node("Character/Init").text)
-		#print(first)
-		#print(second)
-		if first > second:
-			return true
+	static func sort_val(a, b):
+		var first = a.get_node("Character/Init").text
+		var second = b.get_node("Character/Init").text
+
+		if int(first) and int(second):
+			if int(first) > int(second):
+				return true
+
+		if first == '0' and second == '0':
+			return false
+		if first == '0' and int(second):
+			return 0 > int(second)
+		if second == '0' and int(first):
+			return int(first) > 0
+
 		return false
+
+	# sorts by orderNum instead of Init value
+	static func sort_order(a, b):
+		var first = a.orderNum
+		var second = b.orderNum
+		if first < second:
+			return true
+		else:
+			return false
+
+
+var newRow = preload("res://Row.tscn")
+var numRows = 0
 
 # @name: ready
 # @desc: connects buttons to their functions
 func _ready():
-	var newChar = preload("res://Character.tscn")
-	var insertButton = get_node("VBoxContainer/Header/Insert")
-	insertButton.connect("button_down", self, "_add_character", [newChar])
+	#var newRow = preload("res://Character.tscn")
+	var insertButton = get_node("VBoxContainer/Header/Buttons/Insert")
+	insertButton.connect("button_down", self, "_new_character")
 	
-	var sortButton = get_node("VBoxContainer/Header/Sort")
-	sortButton.connect("button_down", self, "_sort_characters")
+	var sortButton = get_node("VBoxContainer/Header/Buttons/Sort")
+	sortButton.connect("button_down", self, "_sort_characters", ["sort_val"])
+	
+	_new_character()
 
 
-# @name: _add_character
-# @param: newChar - object to be instanced
+# @name: _new_character
+# @param: addRow - object to be instanced
 # @desc: instances object and adds to the current scene
-func _add_character(var newChar):
-	get_node("VBoxContainer").add_child(newChar.instance())
+func _new_character():
+	var row = newRow.instance()
+	numRows += 1
+	row.orderNum = numRows
+	
+	get_node("VBoxContainer").add_child(row)
+	row.get_node("Buttons/ButtonUp").connect("button_down", self, "_move_up", [row])
+	row.get_node("Buttons/ButtonDown").connect("button_down", self, "_move_down", [row])
+	row.connect("tree_exited", self, "_row_deleted")
+
+
+# @name: _move_up
+# @param: row - Row to be moved up
+# @desc: swaps the order of 2 rows in the scene
+func _move_up(row):
+	if row.orderNum == 1: # already at top
+		return
+
+	var nodes = get_tree().get_nodes_in_group("Rows")
+	var rowAbove = 0
+	for i in nodes: # find row immediately above it
+		if i.orderNum == (row.orderNum - 1):
+			rowAbove = i
+			break
+	
+	if typeof(rowAbove) != TYPE_INT:
+		rowAbove.orderNum += 1
+		row.orderNum -= 1
+		_sort_characters("sort_order") # sort by orderNum
+
+
+# @name: _move_down
+# @param: row - Row to be moved down
+# @desc: swaps the order of 2 rows in the scene
+func _move_down(row):
+	if row.orderNum == numRows: # already at bottom
+		return
+	var rowBelow = 0
+	var nodes = get_tree().get_nodes_in_group("Rows")
+	
+	for i in nodes: # find row immediately below it
+		if i.orderNum == (row.orderNum + 1):
+			rowBelow = i
+			break
+	
+	if typeof(rowBelow) != TYPE_INT:
+		rowBelow.orderNum -= 1
+		row.orderNum += 1
+		_sort_characters("sort_order") # sort by orderNum
+
+
+# @name: _row_deleted
+# @desc: Keeps track of number of rows, called when a row exits the scene
+func _row_deleted():
+	numRows -= 1
+	_set_order_numbers(get_tree().get_nodes_in_group("Rows"))
 
 
 # @name: _sort_characters
-# @desc: sorts the Characters
-func _sort_characters():
-	var sortArray = get_tree().get_nodes_in_group("Characters")
-	sortArray.sort_custom(CustomSorter, "sort")
-	var newNodes = _make_new_chars(sortArray)
+# @param: type of sort - either "sort_order" or "sort_val"
+# @desc: sorts the rows in the scene
+func _sort_characters(sort_type):
+	var sortArray = get_tree().get_nodes_in_group("Rows")
+	sortArray.sort_custom(CustomSorter, sort_type)
 	
-	for i in sortArray:
+	var newNodes = _make_new_rows(sortArray)
+	_test_integers(newNodes) # checks if Init is integer
+	
+	var temp = numRows
+	var oldRows = get_tree().get_nodes_in_group("Rows")
+	for i in oldRows: # remove current nodes from scene
 		i.queue_free()
+	numRows = temp
 	
 	var parent = get_node("VBoxContainer")
-	for i in newNodes:
+	for i in newNodes: # add sorted nodes to scene
 		parent.add_child(i)
 
 
-# @name: _make_new_chars
-# @param: old - array of nodes to be sorted
-# @desc: makes copies of the old nodes and creates new objects
-# @return: array of new character objects
-func _make_new_chars(var old):
-	var newChar = preload("res://Character.tscn")
-	var new_chars = []
+# @name: _test_integers
+# @param: array of row nodes in the scene
+# @desc: goes through all row nodes and checks if the Init valus is an integer
+func _test_integers(rows):
+	for i in rows:
+		if not int(i.get_node("Character/Init").text) and i.get_node("Character/Init").text != '0': # Init is not an integer
+			i.get_node("Character/Init").add_color_override("font_color", Color(1, 0.27, 0, 1))
+
+
+# @name: _make_new_rows
+# @param: old - array of nodes to be copied
+# @desc: creates new nodes and copies the data from the old, connecting new signals as well
+# @return: array of row nodes with identical data to old
+func _make_new_rows(old):
+	var new_rows = []
 	for i in old:
-		var character = newChar.instance()
-		character.get_node("Character/Init").text = i.get_node("Character/Init").text
-		character.get_node("Character/Name").text = i.get_node("Character/Name").text
-		character.get_node("Character/Info").text = i.get_node("Character/Info").text
-		new_chars.append(character)
-	return new_chars
+		var row = newRow.instance()
+		row.get_node("Character/Init").text = i.get_node("Character/Init").text
+		row.get_node("Character/Name").text = i.get_node("Character/Name").text
+		row.get_node("Character/Info").text = i.get_node("Character/Info").text
+		row.get_node("Buttons/ButtonUp").connect("button_down", self, "_move_up", [row])
+		row.get_node("Buttons/ButtonDown").connect("button_down", self, "_move_down", [row])
+		row.connect("tree_exited", self, "_row_deleted")
+		new_rows.append(row)
+	
+	_set_order_numbers(new_rows)
+	return new_rows
+
+# @name: _set_order_numbers
+# @param: rows - array of rows to be set
+# @desc: goes through 'rows' and sets their 'orderNum' to be in the array's order
+func _set_order_numbers(rows):
+	var num = 1
+	for i in rows:
+		i.orderNum = num
+		num += 1

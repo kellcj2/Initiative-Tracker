@@ -10,8 +10,11 @@ config_version=3
 
 [application]
 
-config/name="Initiative Tracker"
+config/name="Initiative Tracker 0.1b"
 run/main_scene="res://Main.tscn"
+config/use_custom_user_dir=true
+boot_splash/image="res://icon.png"
+boot_splash/fullsize=false
 config/icon="res://icon.png"
 
 [display]

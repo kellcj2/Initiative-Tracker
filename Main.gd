@@ -106,7 +106,10 @@ func _move_down(row):
 # @desc: Keeps track of number of rows, called when a row exits the scene
 func _row_deleted():
 	numRows -= 1
-	_set_order_numbers(get_tree().get_nodes_in_group("Rows"))
+	if get_tree():
+		var nodes = get_tree().get_nodes_in_group("Rows")
+		if nodes:
+			_set_order_numbers(nodes)
 
 
 # @name: _sort_characters
@@ -137,6 +140,7 @@ func _test_integers(rows):
 	for i in rows:
 		if not int(i.get_node("Character/Init").text) and i.get_node("Character/Init").text != '0': # Init is not an integer
 			i.get_node("Character/Init").add_color_override("font_color", Color(1, 0.27, 0, 1))
+			i.get_node("Character/Init").text = '0'
 
 
 # @name: _make_new_rows

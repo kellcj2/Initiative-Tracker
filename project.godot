@@ -6,12 +6,20 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=3
+config_version=4
+
+_global_script_classes=[  ]
+_global_script_class_icons={
+
+}
 
 [application]
 
-config/name="Initiative Tracker"
+config/name="Initiative Tracker 0.1b"
 run/main_scene="res://Main.tscn"
+config/use_custom_user_dir=true
+boot_splash/image="res://icon.png"
+boot_splash/fullsize=false
 config/icon="res://icon.png"
 
 [display]

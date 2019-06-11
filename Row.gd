@@ -1,7 +1,7 @@
 extends HBoxContainer
 
 
-var orderNum = -1
+var orderNum
 
-#func _ready():
-	#pass
+func _ready():
+	orderNum = -1

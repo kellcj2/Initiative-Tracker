@@ -20,7 +20,6 @@ run/main_scene="res://Main.tscn"
 config/use_custom_user_dir=true
 boot_splash/image="res://icon.png"
 boot_splash/fullsize=false
-boot_splash/bg_color=Color( 0.137255, 0.137255, 0.137255, 0 )
 config/icon="res://icon.png"
 
 [display]

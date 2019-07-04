@@ -45,6 +45,12 @@ func _ready():
 	var sortButton = get_node("VBoxContainer/Header/Buttons/Sort")
 	sortButton.connect("button_down", self, "_sort_characters", ["sort_val"])
 	
+	var saveButton = get_node("VBoxContainer/Header/Buttons/SaveGame")
+	saveButton.connect("button_down", self, "_save_game")
+	
+	var loadButton = get_node("VBoxContainer/Header/Buttons/LoadGame")
+	loadButton.connect("button_down", self, "_load_game")
+	
 	_new_character()
 
 
@@ -170,3 +176,54 @@ func _set_order_numbers(rows):
 	for i in rows:
 		i.orderNum = num
 		num += 1
+
+
+# @name: _save_game
+# @param: none
+# @desc: saves all Row nodes in the current scene
+func _save_game():
+	var save_game = File.new()
+	save_game.open("res://savegame.save", File.WRITE)
+	var save_nodes = get_tree().get_nodes_in_group("Rows")
+	for i in save_nodes:
+		var char_data = i._get_save_data()
+		save_game.store_line(to_json(char_data))
+	save_game.close()
+	print("Done saving")
+
+
+# @name: _load_game
+# @param: none
+# @desc: removes all Rows and loads new ones from the save file
+func _load_game():
+	var save_game = File.new()
+	if not save_game.file_exists("res://savegame.save"):
+		print("No file found")
+		return # no save to load
+
+	# delete current scene
+	var save_nodes = get_tree().get_nodes_in_group("Rows")
+	for i in save_nodes:
+		i.queue_free()
+	
+	# process saved data
+	save_game.open("res://savegame.save", File.READ)
+	while not save_game.eof_reached():
+		var current_line = parse_json(save_game.get_line())
+		if current_line == null: # adds a blank line at end of file when saving for whatever reason...
+			break
+		
+		var new_object = load(current_line["filename"]).instance()
+		get_node(current_line["parent"]).add_child(new_object)
+		for i in current_line.keys(): # sets appropriate data for the new object
+			if i == "filename" or i == "parent":
+				continue
+			var data_path = "Character/" + i
+			new_object.get_node(data_path).text = current_line[i]
+	save_game.close()
+
+
+
+
+
+

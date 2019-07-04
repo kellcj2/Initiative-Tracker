@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://FTLTLT.TTF" type="DynamicFontData" id=2]
+[ext_resource path="res://custom_font.tres" type="DynamicFont" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -26,15 +27,14 @@ margin_bottom = 15.0
 rect_min_size = Vector2( 0, 15 )
 
 [node name="Header" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 32.0
+margin_left = 16.0
 margin_top = 19.0
-margin_right = 480.0
+margin_right = 496.0
 margin_bottom = 44.0
 size_flags_horizontal = 4
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer/Header"]
-editor/display_folded = true
-margin_right = 108.0
+margin_right = 215.0
 margin_bottom = 25.0
 
 [node name="Sort" type="Button" parent="VBoxContainer/Header/Buttons"]
@@ -50,17 +50,31 @@ margin_bottom = 25.0
 custom_fonts/font = SubResource( 2 )
 text = "Insert"
 
-[node name="Spacer" type="Label" parent="VBoxContainer/Header"]
+[node name="SaveGame" type="Button" parent="VBoxContainer/Header/Buttons"]
 margin_left = 112.0
+margin_right = 161.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 3 )
+text = "Save"
+
+[node name="LoadGame" type="Button" parent="VBoxContainer/Header/Buttons"]
+margin_left = 165.0
+margin_right = 215.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 3 )
+text = "Load"
+
+[node name="Spacer" type="Label" parent="VBoxContainer/Header"]
+margin_left = 219.0
 margin_top = 5.0
-margin_right = 337.0
+margin_right = 369.0
 margin_bottom = 19.0
-rect_min_size = Vector2( 225, 0 )
+rect_min_size = Vector2( 150, 0 )
 
 [node name="Label" type="Label" parent="VBoxContainer/Header"]
-margin_left = 341.0
+margin_left = 373.0
 margin_top = 5.0
-margin_right = 448.0
+margin_right = 480.0
 margin_bottom = 19.0
 text = "Initiative Tracker"
 align = 2

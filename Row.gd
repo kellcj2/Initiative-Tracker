@@ -7,7 +7,6 @@ func _ready():
 	orderNum = -1
 
 
-
 func _get_save_data():
 	var save_dict = {
 		"filename" : get_filename(),

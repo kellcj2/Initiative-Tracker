@@ -27,14 +27,14 @@ margin_bottom = 15.0
 rect_min_size = Vector2( 0, 15 )
 
 [node name="Header" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 16.0
+margin_left = 7.0
 margin_top = 19.0
-margin_right = 496.0
+margin_right = 504.0
 margin_bottom = 44.0
 size_flags_horizontal = 4
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer/Header"]
-margin_right = 215.0
+margin_right = 497.0
 margin_bottom = 25.0
 
 [node name="Sort" type="Button" parent="VBoxContainer/Header/Buttons"]
@@ -50,31 +50,39 @@ margin_bottom = 25.0
 custom_fonts/font = SubResource( 2 )
 text = "Insert"
 
-[node name="SaveGame" type="Button" parent="VBoxContainer/Header/Buttons"]
+[node name="Spacer" type="Label" parent="VBoxContainer/Header/Buttons"]
 margin_left = 112.0
-margin_right = 161.0
+margin_top = 5.0
+margin_right = 187.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 75, 0 )
+
+[node name="Clear" type="Button" parent="VBoxContainer/Header/Buttons"]
+margin_left = 191.0
+margin_right = 246.0
+margin_bottom = 25.0
+custom_fonts/font = ExtResource( 3 )
+text = "Clear"
+
+[node name="SaveGame" type="Button" parent="VBoxContainer/Header/Buttons"]
+margin_left = 250.0
+margin_right = 299.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 3 )
 text = "Save"
 
 [node name="LoadGame" type="Button" parent="VBoxContainer/Header/Buttons"]
-margin_left = 165.0
-margin_right = 215.0
+margin_left = 303.0
+margin_right = 353.0
 margin_bottom = 25.0
 custom_fonts/font = ExtResource( 3 )
 text = "Load"
 
-[node name="Spacer" type="Label" parent="VBoxContainer/Header"]
-margin_left = 219.0
-margin_top = 5.0
-margin_right = 369.0
-margin_bottom = 19.0
-rect_min_size = Vector2( 150, 0 )
-
-[node name="Label" type="Label" parent="VBoxContainer/Header"]
-margin_left = 373.0
-margin_top = 5.0
-margin_right = 480.0
-margin_bottom = 19.0
+[node name="Label" type="Label" parent="VBoxContainer/Header/Buttons"]
+margin_left = 357.0
+margin_top = 3.0
+margin_right = 497.0
+margin_bottom = 22.0
+custom_fonts/font = ExtResource( 3 )
 text = "Initiative Tracker"
 align = 2

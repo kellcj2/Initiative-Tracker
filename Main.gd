@@ -33,6 +33,7 @@ class CustomSorter:
 
 
 var newRow = preload("res://Row.tscn")
+var newFileScreen = preload("res://FileScreen.tscn")
 var numRows = 0
 
 # @name: ready
@@ -45,6 +46,35 @@ func _ready():
 	var sortButton = get_node("VBoxContainer/Header/Buttons/Sort")
 	sortButton.connect("button_down", self, "_sort_characters", ["sort_val"])
 	
+	var saveButton = get_node("VBoxContainer/Header/Buttons/SaveGame")
+	saveButton.connect("button_down", self, "_save_screen")
+	
+	var loadButton = get_node("VBoxContainer/Header/Buttons/LoadGame")
+	loadButton.connect("button_down", self, "_load_screen")
+	
+	var clearButton = get_node("VBoxContainer/Header/Buttons/Clear")
+	clearButton.connect("button_down", self, "_clear_rows")
+	
+	_new_character() # make first blank character row
+
+
+# @name:  _clear_rows
+# @desc:  brings up a window asking to confirm clearing all rows
+func _clear_rows():
+	var confirm = ConfirmationDialog.new()
+	get_node("VBoxContainer").add_child(confirm)
+	confirm.window_title = "Clear"
+	confirm.dialog_text = "Clear All Rows?"
+	confirm.popup_centered()
+	confirm.connect("confirmed", self, "_confirm_clear")
+
+
+# @name:  _confirm_clear
+# @desc:  when "ok" is pressed on the clear rows dialog, clear all rows
+func _confirm_clear():
+	var rows = get_tree().get_nodes_in_group("Rows")
+	for i in rows:
+		i.queue_free()
 	_new_character()
 
 
@@ -150,6 +180,7 @@ func _test_integers(rows):
 func _make_new_rows(old):
 	var new_rows = []
 	for i in old:
+		# TODO: might be easier to just add everything to a big dictionary
 		var row = newRow.instance()
 		row.get_node("Character/Init").text = i.get_node("Character/Init").text
 		row.get_node("Character/Name").text = i.get_node("Character/Name").text
@@ -162,6 +193,7 @@ func _make_new_rows(old):
 	_set_order_numbers(new_rows)
 	return new_rows
 
+
 # @name: _set_order_numbers
 # @param: rows - array of rows to be set
 # @desc: goes through 'rows' and sets their 'orderNum' to be in the array's order
@@ -170,3 +202,87 @@ func _set_order_numbers(rows):
 	for i in rows:
 		i.orderNum = num
 		num += 1
+
+
+# @name: _save_screen
+# @desc: opens up the save screen
+func _save_screen():
+	var save = newFileScreen.instance()
+	save._set_save_mode()
+	get_node("VBoxContainer").add_child(save)
+	save.connect("file_selected", self, "_save_file")
+
+
+# @name:  _load_screen
+# @desc:  brings up a file browser to select a save file to load
+func _load_screen():
+	var loadScreen = newFileScreen.instance()
+	loadScreen._set_load_mode()
+	get_node("VBoxContainer").add_child(loadScreen)
+	loadScreen.connect("file_selected", self, "_load_file")
+
+
+# @name:  _save_file
+# @param: filename - the file to save to
+# @desc:  saves the current rows into a file
+func _save_file(var filename):
+	var accept = AcceptDialog.new()
+	accept.rect_min_size = Vector2(400, 0)
+	accept.window_title = "Save File"
+	get_node("VBoxContainer").add_child(accept)
+	if filename[filename.length()-5] == "/":
+		accept.dialog_text = "Error: No File Selected"
+		accept.popup_centered()
+		return
+	else: 
+		accept.dialog_text = "File Saved as " + filename
+		accept.popup_centered()
+
+	var save_game = File.new()
+	if save_game.open(filename, File.WRITE) != 0:
+		return # can't open file
+	var save_nodes = get_tree().get_nodes_in_group("Rows")
+	for i in save_nodes: # get all data in current rows and write to file
+		var char_data = i._get_save_data()
+		save_game.store_line(to_json(char_data))
+	save_game.close()
+	
+	print("Done saving")
+	print(filename)
+
+
+# @name: _load_file
+# @param: none
+# @desc: removes all Rows and loads new ones from the save file
+func _load_file(var filename):
+	var load_game = File.new()
+	if not load_game.file_exists(filename):
+		print("No file found")
+		return # no save to load
+
+	# delete current scene
+	var save_nodes = get_tree().get_nodes_in_group("Rows")
+	for i in save_nodes:
+		i.queue_free()
+	
+	# process saved data
+	load_game.open(filename, File.READ)
+	while not load_game.eof_reached():
+		var current_line = parse_json(load_game.get_line())
+		if current_line == null: # adds a blank line at end of file when saving for whatever reason...
+			break
+		
+		var new_object = load(current_line["filename"]).instance()
+		get_node(current_line["parent"]).add_child(new_object)
+		for i in current_line.keys(): # sets appropriate data for the new object
+			if i == "filename" or i == "parent":
+				continue
+			var data_path = "Character/" + i
+			new_object.get_node(data_path).text = current_line[i]
+	load_game.close()
+
+
+
+
+
+

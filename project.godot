@@ -16,18 +16,17 @@ _global_script_class_icons={
 [application]
 
 config/name="Initiative Tracker 0.3b"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://Scenes/Main.tscn"
 config/use_custom_user_dir=true
-boot_splash/image="res://icon.png"
-boot_splash/fullsize=false
-config/icon="res://icon.png"
+boot_splash/image="res://Theme/icon.png"
+boot_splash/bg_color=Color( 0.137255, 0.137255, 0.137255, 0 )
+config/icon="res://Theme/icon.png"
 
 [display]
 
 window/size/width=512
-window/size/height=512
+window/size/height=620
 
 [rendering]
 
 quality/driver/fallback_to_gles2=true
-environment/default_environment="res://default_env.tres"

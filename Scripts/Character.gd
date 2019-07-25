@@ -6,6 +6,20 @@ func _ready():
 	
 	var init_text = get_node("Init")
 	init_text.connect("focus_exited", self, "_check_input")
+	init_text.connect("focus_exited", self, "_clear_select", [init_text])
+	
+	var name = get_node("Name")
+	name.connect("focus_exited", self, "_clear_select", [name])
+	
+	var info = get_node("Info")
+	info.connect("focus_exited", self, "_clear_select", [info])
+
+
+# @name: _clear_select
+# @desc: clears selected text when focus is lost
+# @param: node - the node who's text is to be cleared
+func _clear_select(node):
+	node.select(0,0)
 
 
 # @name: _delete_button
@@ -16,6 +30,10 @@ func _delete_button():
 
 # @name: _check_input
 # @desc: if input is expression, calculate. If error, make red
+"""
+TODO:
+	basically scrap this whole thing and just check if number or not and change color
+"""
 func _check_input():
 	var init_node = get_node("Init")
 	var txt = init_node.text

@@ -1,15 +1,16 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Row.gd" type="Script" id=1]
-[ext_resource path="res://arrowUp.png" type="Texture" id=2]
-[ext_resource path="res://arrowDown.png" type="Texture" id=3]
-[ext_resource path="res://Character.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scripts/Row.gd" type="Script" id=1]
+[ext_resource path="res://Theme/arrowUp.png" type="Texture" id=2]
+[ext_resource path="res://Theme/arrowDown.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/Character.tscn" type="PackedScene" id=4]
 
 [node name="Row" type="HBoxContainer" groups=[
 "Rows",
 ]]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 474.0
+margin_bottom = 44.0
+size_flags_horizontal = 4
 script = ExtResource( 1 )
 
 [node name="Buttons" type="VBoxContainer" parent="."]
@@ -29,5 +30,5 @@ icon = ExtResource( 3 )
 
 [node name="Character" parent="." instance=ExtResource( 4 )]
 margin_left = 36.0
-margin_right = 461.0
+margin_right = 474.0
 margin_bottom = 44.0

@@ -32,27 +32,27 @@ class CustomSorter:
 			return false
 
 
-var newRow = preload("res://Row.tscn")
-var newFileScreen = preload("res://FileScreen.tscn")
+var newRow = preload("res://Scenes/Row.tscn")
+var newFileScreen = preload("res://Scenes/FileScreen.tscn")
 var numRows = 0
 
 # @name: ready
 # @desc: connects buttons to their functions
 func _ready():
 	#var newRow = preload("res://Character.tscn")
-	var insertButton = get_node("VBoxContainer/Header/Buttons/Insert")
+	var insertButton = get_node("VBoxContainer/Buttons/Insert")
 	insertButton.connect("button_down", self, "_new_character")
 	
-	var sortButton = get_node("VBoxContainer/Header/Buttons/Sort")
+	var sortButton = get_node("VBoxContainer/Buttons/Sort")
 	sortButton.connect("button_down", self, "_sort_characters", ["sort_val"])
 	
-	var saveButton = get_node("VBoxContainer/Header/Buttons/SaveGame")
+	var saveButton = get_node("VBoxContainer/Buttons/SaveGame")
 	saveButton.connect("button_down", self, "_save_screen")
 	
-	var loadButton = get_node("VBoxContainer/Header/Buttons/LoadGame")
+	var loadButton = get_node("VBoxContainer/Buttons/LoadGame")
 	loadButton.connect("button_down", self, "_load_screen")
 	
-	var clearButton = get_node("VBoxContainer/Header/Buttons/Clear")
+	var clearButton = get_node("VBoxContainer/Buttons/Clear")
 	clearButton.connect("button_down", self, "_clear_rows")
 	
 	_new_character() # make first blank character row
@@ -84,13 +84,12 @@ func _confirm_clear():
 func _new_character():
 	var row = newRow.instance()
 	numRows += 1
-	row.orderNum = numRows
 	
 	get_node("VBoxContainer").add_child(row)
+	row.orderNum = numRows
 	row.get_node("Buttons/ButtonUp").connect("button_down", self, "_move_up", [row])
 	row.get_node("Buttons/ButtonDown").connect("button_down", self, "_move_down", [row])
-	row.connect("tree_exited", self, "_row_deleted")
-
+	row.connect("tree_exiting", self, "_row_deleted")
 
 # @name: _move_up
 # @param: row - Row to be moved up
@@ -187,7 +186,7 @@ func _make_new_rows(old):
 		row.get_node("Character/Info").text = i.get_node("Character/Info").text
 		row.get_node("Buttons/ButtonUp").connect("button_down", self, "_move_up", [row])
 		row.get_node("Buttons/ButtonDown").connect("button_down", self, "_move_down", [row])
-		row.connect("tree_exited", self, "_row_deleted")
+		row.connect("tree_exiting", self, "_row_deleted")
 		new_rows.append(row)
 	
 	_set_order_numbers(new_rows)
@@ -269,7 +268,7 @@ func _load_file(var filename):
 	load_game.open(filename, File.READ)
 	while not load_game.eof_reached():
 		var current_line = parse_json(load_game.get_line())
-		if current_line == null: # adds a blank line at end of file when saving for whatever reason...
+		if current_line == null: # there's a blank line at end of file when saving for whatever reason...
 			break
 		
 		var new_object = load(current_line["filename"]).instance()

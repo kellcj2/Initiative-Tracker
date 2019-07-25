@@ -42,59 +42,38 @@ theme = ExtResource( 3 )
 alignment = 1
 
 [node name="Sort" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 7.0
-margin_right = 69.0
+margin_left = 28.0
+margin_right = 90.0
 margin_bottom = 38.0
 text = "Sort"
 
-[node name="Spacer" type="Label" parent="VBoxContainer/Buttons"]
-margin_left = 73.0
-margin_top = 5.0
-margin_right = 83.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 10, 0 )
-
 [node name="Insert" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 87.0
-margin_right = 170.0
+margin_left = 94.0
+margin_right = 177.0
 margin_bottom = 38.0
 text = "Insert"
 
-[node name="Spacer2" type="Label" parent="VBoxContainer/Buttons"]
-margin_left = 174.0
+[node name="Spacer" type="Label" parent="VBoxContainer/Buttons"]
+margin_left = 181.0
 margin_top = 5.0
-margin_right = 249.0
+margin_right = 256.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 75, 0 )
 
 [node name="Clear" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 253.0
-margin_right = 334.0
+margin_left = 260.0
+margin_right = 341.0
 margin_bottom = 38.0
 text = "Clear"
 
-[node name="Spacer3" type="Label" parent="VBoxContainer/Buttons"]
-margin_left = 338.0
-margin_top = 5.0
-margin_right = 348.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 10, 0 )
-
 [node name="SaveGame" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 352.0
-margin_right = 413.0
+margin_left = 345.0
+margin_right = 406.0
 margin_bottom = 38.0
 text = "Save"
 
-[node name="Spacer4" type="Label" parent="VBoxContainer/Buttons"]
-margin_left = 417.0
-margin_top = 5.0
-margin_right = 427.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 10, 0 )
-
 [node name="LoadGame" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 431.0
-margin_right = 505.0
+margin_left = 410.0
+margin_right = 484.0
 margin_bottom = 38.0
 text = "Load"

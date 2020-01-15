@@ -15,7 +15,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Initiative Tracker 0.3b"
+config/name="Initiative Tracker 0.4b"
 run/main_scene="res://Scenes/Main.tscn"
 config/use_custom_user_dir=true
 boot_splash/image="res://Theme/icon.png"
@@ -24,7 +24,7 @@ config/icon="res://Theme/icon.png"
 
 [display]
 
-window/size/width=512
+window/size/width=680
 window/size/height=620
 
 [rendering]

@@ -1,64 +1,58 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://Scripts/Character.gd" type="Script" id=1]
-[ext_resource path="res://Theme/button_hover.tres" type="StyleBox" id=2]
-[ext_resource path="res://Theme/button_normal.tres" type="StyleBox" id=3]
-[ext_resource path="res://Theme/button_pressed.tres" type="StyleBox" id=4]
-[ext_resource path="res://Fonts/Neverwinter.otf" type="DynamicFontData" id=5]
-
-[sub_resource type="DynamicFont" id=1]
-size = 18
-outline_size = 1
-outline_color = Color( 0, 0, 0, 0.486275 )
-font_data = ExtResource( 5 )
-
-[sub_resource type="Theme" id=2]
-default_font = SubResource( 1 )
-Button/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
-Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
-Button/colors/font_color_hover = Color( 0.941176, 0.941176, 0.941176, 1 )
-Button/colors/font_color_pressed = Color( 1, 1, 1, 0.588235 )
-Button/constants/hseparation = 2
-Button/fonts/font = null
-Button/styles/disabled = null
-Button/styles/focus = null
-Button/styles/hover = ExtResource( 2 )
-Button/styles/normal = ExtResource( 3 )
-Button/styles/pressed = ExtResource( 4 )
 
 [node name="Character" type="HBoxContainer" groups=[
 "Characters",
 ]]
-margin_right = 529.0
+margin_right = 490.0
 margin_bottom = 24.0
 mouse_filter = 0
 script = ExtResource( 1 )
 
 [node name="Init" type="LineEdit" parent="."]
-margin_top = 3.0
 margin_right = 58.0
-margin_bottom = 27.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 58, 0 )
 size_flags_vertical = 4
 align = 1
-placeholder_text = "0"
+placeholder_text = "Init"
 caret_blink = true
 
 [node name="Name" type="LineEdit" parent="."]
 margin_left = 62.0
-margin_top = 3.0
 margin_right = 202.0
-margin_bottom = 27.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 140, 0 )
 size_flags_vertical = 4
 align = 1
 placeholder_text = "Name"
 caret_blink = true
 
-[node name="Info" type="LineEdit" parent="."]
+[node name="HP" type="LineEdit" parent="."]
 margin_left = 206.0
-margin_top = 3.0
-margin_right = 366.0
-margin_bottom = 27.0
+margin_right = 264.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 58, 0 )
+size_flags_vertical = 4
+align = 1
+placeholder_text = "HP"
+caret_blink = true
+
+[node name="AC" type="LineEdit" parent="."]
+margin_left = 268.0
+margin_right = 326.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 58, 0 )
+size_flags_vertical = 4
+align = 1
+placeholder_text = "AC"
+caret_blink = true
+
+[node name="Info" type="LineEdit" parent="."]
+margin_left = 330.0
+margin_right = 490.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 160, 0 )
 mouse_default_cursor_shape = 0
 size_flags_vertical = 4
@@ -66,11 +60,3 @@ align = 1
 expand_to_text_length = true
 placeholder_text = "Info"
 caret_blink = true
-
-[node name="Button" type="Button" parent="."]
-margin_left = 370.0
-margin_right = 438.0
-margin_bottom = 31.0
-size_flags_vertical = 4
-theme = SubResource( 2 )
-text = "Delete"

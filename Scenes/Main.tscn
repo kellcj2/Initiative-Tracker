@@ -1,79 +1,80 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Main.gd" type="Script" id=1]
-[ext_resource path="res://Fonts/Neverwinter.otf" type="DynamicFontData" id=2]
-[ext_resource path="res://Theme/custom_theme.tres" type="Theme" id=3]
+[ext_resource path="res://Scripts/Menu.gd" type="Script" id=2]
+[ext_resource path="res://Fonts/Neverwinter.otf" type="DynamicFontData" id=3]
+[ext_resource path="res://Theme/custom_theme.tres" type="Theme" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 40
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 2 )
+font_data = ExtResource( 3 )
 
 [node name="Main" type="MarginContainer"]
-margin_right = 512.0
-margin_bottom = 107.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 1 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_right = 512.0
-margin_bottom = 107.0
+margin_right = 680.0
+margin_bottom = 620.0
+
+[node name="Menu" type="HBoxContainer" parent="VBoxContainer"]
+editor/display_folded = true
+margin_right = 680.0
+margin_bottom = 20.0
+script = ExtResource( 2 )
+
+[node name="File" type="MenuButton" parent="VBoxContainer/Menu"]
+margin_right = 35.0
+margin_bottom = 20.0
+text = "File"
+flat = false
+
+[node name="Options" type="MenuButton" parent="VBoxContainer/Menu"]
+margin_left = 39.0
+margin_right = 102.0
+margin_bottom = 20.0
+text = "Options"
+flat = false
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 512.0
-margin_bottom = 46.0
+margin_top = 24.0
+margin_right = 680.0
+margin_bottom = 70.0
 size_flags_vertical = 1
 custom_fonts/font = SubResource( 1 )
 text = "Initiative Tracker"
 align = 1
 
-[node name="Spacer" type="Label" parent="VBoxContainer"]
-margin_top = 50.0
-margin_right = 512.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 0, 10 )
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 74.0
+margin_right = 680.0
+margin_bottom = 112.0
+theme = ExtResource( 4 )
+
+[node name="Spacer" type="Label" parent="VBoxContainer/Buttons"]
+margin_right = 32.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 32, 10 )
 size_flags_vertical = 0
 
-[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 68.0
-margin_right = 512.0
-margin_bottom = 106.0
-theme = ExtResource( 3 )
-alignment = 1
-
 [node name="Sort" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 28.0
-margin_right = 90.0
+margin_left = 36.0
+margin_right = 98.0
 margin_bottom = 38.0
 text = "Sort"
 
 [node name="Insert" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 94.0
-margin_right = 177.0
+margin_left = 102.0
+margin_right = 185.0
 margin_bottom = 38.0
 text = "Insert"
 
-[node name="Spacer" type="Label" parent="VBoxContainer/Buttons"]
-margin_left = 181.0
-margin_top = 5.0
-margin_right = 256.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 75, 0 )
-
-[node name="Clear" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 260.0
-margin_right = 341.0
-margin_bottom = 38.0
-text = "Clear"
-
-[node name="SaveGame" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 345.0
-margin_right = 406.0
-margin_bottom = 38.0
-text = "Save"
-
-[node name="LoadGame" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 410.0
-margin_right = 484.0
-margin_bottom = 38.0
-text = "Load"
+[node name="Spacer" type="Label" parent="VBoxContainer"]
+margin_top = 116.0
+margin_right = 680.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 0, 10 )
+size_flags_vertical = 0

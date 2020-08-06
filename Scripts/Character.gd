@@ -1,15 +1,18 @@
 extends HBoxContainer
 
 func _ready():
-	var delButton = get_node("Button")
-	delButton.connect("button_down", self, "_delete_button")
-	
 	var init_text = get_node("Init")
 	init_text.connect("focus_exited", self, "_check_input")
 	init_text.connect("focus_exited", self, "_clear_select", [init_text])
 	
 	var name = get_node("Name")
 	name.connect("focus_exited", self, "_clear_select", [name])
+	
+	var hp = get_node("HP")
+	hp.connect("focus_exited", self, "_clear_select", [hp])
+	
+	var ac = get_node("AC")
+	ac.connect("focus_exited", self, "_clear_select", [ac])
 	
 	var info = get_node("Info")
 	info.connect("focus_exited", self, "_clear_select", [info])
@@ -23,17 +26,13 @@ func _clear_select(node):
 
 
 # @name: _delete_button
-# @desc: delete button pushed, remove row from the scene
+# @desc: delete button pushed, remove ROW from the scene
 func _delete_button():
-	get_parent().queue_free()
+	get_parent().get_parent().queue_free()
 
 
 # @name: _check_input
 # @desc: if input is expression, calculate. If error, make red
-"""
-TODO:
-	basically scrap this whole thing and just check if number or not and change color
-"""
 func _check_input():
 	var init_node = get_node("Init")
 	var txt = init_node.text
@@ -49,7 +48,7 @@ func _check_input():
 			if i+1 < max_len:
 				 i += 1
 
-		while int(txt[i]): # get entire integer
+		while (int(txt[i]) or txt[i] == '0'): # get entire integer
 			num += txt[i]
 			if i < len(txt)-1: 
 				i += 1

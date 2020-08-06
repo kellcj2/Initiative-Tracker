@@ -15,13 +15,15 @@ font_data = ExtResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 680.0
 margin_bottom = 620.0
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer"]
-editor/display_folded = true
 margin_right = 680.0
 margin_bottom = 20.0
 script = ExtResource( 2 )
@@ -78,3 +80,55 @@ margin_right = 680.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 0, 10 )
 size_flags_vertical = 0
+
+[node name="Labels" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 134.0
+margin_right = 680.0
+margin_bottom = 148.0
+alignment = 1
+
+[node name="Init" type="Label" parent="VBoxContainer/Labels"]
+margin_left = 83.0
+margin_right = 141.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 58, 0 )
+text = "Init"
+align = 1
+
+[node name="Name" type="Label" parent="VBoxContainer/Labels"]
+margin_left = 145.0
+margin_right = 285.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 140, 0 )
+text = "Name"
+align = 1
+
+[node name="HP" type="Label" parent="VBoxContainer/Labels"]
+margin_left = 289.0
+margin_right = 347.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 58, 0 )
+text = "HP"
+align = 1
+
+[node name="AC" type="Label" parent="VBoxContainer/Labels"]
+margin_left = 351.0
+margin_right = 409.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 58, 0 )
+text = "AC"
+align = 1
+
+[node name="Info" type="Label" parent="VBoxContainer/Labels"]
+margin_left = 413.0
+margin_right = 573.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 160, 0 )
+text = "Info"
+align = 1
+
+[node name="Spacer" type="Label" parent="VBoxContainer/Labels"]
+margin_left = 577.0
+margin_right = 597.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 20, 0 )

@@ -9,6 +9,9 @@ margin_right = 490.0
 margin_bottom = 24.0
 mouse_filter = 0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Init" type="LineEdit" parent="."]
 margin_right = 58.0

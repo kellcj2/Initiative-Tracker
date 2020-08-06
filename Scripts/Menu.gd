@@ -114,6 +114,11 @@ func _save_file(var filename):
 	var save_game = File.new()
 	if save_game.open(filename, File.WRITE) != 0:
 		return # can't open file
+	
+	save_game.store_line(to_json(nameVisible))
+	save_game.store_line(to_json(hpVisible))
+	save_game.store_line(to_json(acVisible))
+	save_game.store_line(to_json(infoVisible))
 	var save_nodes = get_tree().get_nodes_in_group("Rows")
 	for i in save_nodes: # get all data in current rows and write to file
 		var char_data = i._get_save_data()
@@ -141,25 +146,50 @@ func _load_file(var filename):
 	# process saved data
 	load_game.open(filename, File.READ)
 	var numRows = 0
-	while not load_game.eof_reached():
-		var current_line = parse_json(load_game.get_line())
-		if current_line == null: # there's a blank line at end of file when saving for whatever reason...
-			break
+	
+	# first 4 lines have label data
+	var name = parse_json(load_game.get_line())
+	var hp = parse_json(load_game.get_line())
+	var ac = parse_json(load_game.get_line())
+	var info = parse_json(load_game.get_line())
 		
+	while load_game.get_position() < load_game.get_len():
+		var current_line = parse_json(load_game.get_line())
+
 		numRows += 1
 		var new_object = load(current_line["filename"]).instance()
 		get_node(current_line["parent"]).add_child(new_object)
 		new_object.orderNum = numRows
-		if numRows == 1:
-			new_object.get_node("Labels").show()
 		
 		for i in current_line.keys(): # sets appropriate data for the new object
 			if i == "filename" or i == "parent":
 				continue
 			var data_path = "Char/Character/" + i
 			new_object.get_node(data_path).text = current_line[i]
-
+			
 	load_game.close()
+	
+	# set LineEdits to invisible if necessary
+	var rows = get_tree().get_nodes_in_group("Rows")
+	for row in rows:
+		if not name:
+			row.get_node("Char/Character/Name").hide()
+		if not hp:
+			row.get_node("Char/Character/HP").hide()
+		if not ac:
+			row.get_node("Char/Character/AC").hide()
+		if not info:
+			row.get_node("Char/Character/Info").hide()
+
+	# set option buttons to appropriate setting
+	if name != nameVisible:
+		_options_pressed(0)
+	if hp != hpVisible:
+		_options_pressed(1)
+	if ac != acVisible:
+		_options_pressed(2)
+	if info != infoVisible:
+		_options_pressed(3)
 
 
 # @name: _options_pressed
@@ -181,15 +211,20 @@ func _options_pressed(ID):
 		current = infoVisible
 	
 	var name = options.get_item_text(ID)
+	# show / hide respective label
+	if current:
+		get_parent().get_node("Labels/" + name).show()
+	else:
+		get_parent().get_node("Labels/" + name).hide()
 	
+	# show / hide respective LineEdit in row
 	var rows = get_tree().get_nodes_in_group("Rows")
 	for row in rows:
 		if current:
 			row.get_node("Char/Character/" + name).show()
-			row.get_node("Labels/" + name).show()
 		else:
 			row.get_node("Char/Character/" + name).hide()
-			row.get_node("Labels/" + name).hide()
+
 
 
 

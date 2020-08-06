@@ -1,21 +1,32 @@
 extends HBoxContainer
 
+onready var expression = Expression.new()
+
 func _ready():
-	var init_text = get_node("Init")
-	init_text.connect("focus_exited", self, "_check_input")
-	init_text.connect("focus_exited", self, "_clear_select", [init_text])
+# warning-ignore:return_value_discarded
+	$Init.connect("focus_exited", self, "_check_input", [null, $Init])
+# warning-ignore:return_value_discarded
+	$HP.connect("focus_exited", self, "_check_input", [null, $HP])
+# warning-ignore:return_value_discarded
+	$AC.connect("focus_exited", self, "_check_input", [null, $AC])
 	
-	var name = get_node("Name")
-	name.connect("focus_exited", self, "_clear_select", [name])
-	
-	var hp = get_node("HP")
-	hp.connect("focus_exited", self, "_clear_select", [hp])
-	
-	var ac = get_node("AC")
-	ac.connect("focus_exited", self, "_clear_select", [ac])
-	
-	var info = get_node("Info")
-	info.connect("focus_exited", self, "_clear_select", [info])
+# warning-ignore:return_value_discarded
+	$Init.connect("text_entered", self, "_check_input", [$Init]) # enter is pressed
+# warning-ignore:return_value_discarded
+	$HP.connect("text_entered", self, "_check_input", [$HP])
+# warning-ignore:return_value_discarded
+	$AC.connect("text_entered", self, "_check_input", [$AC])
+
+# warning-ignore:return_value_discarded
+	$Init.connect("focus_exited", self, "_clear_select", [$Init])
+# warning-ignore:return_value_discarded
+	$Name.connect("focus_exited", self, "_clear_select", [$Name])
+# warning-ignore:return_value_discarded
+	$HP.connect("focus_exited", self, "_clear_select", [$HP])
+# warning-ignore:return_value_discarded
+	$AC.connect("focus_exited", self, "_clear_select", [$AC])
+# warning-ignore:return_value_discarded
+	$Info.connect("focus_exited", self, "_clear_select", [$Info])
 
 
 # @name: _clear_select
@@ -33,40 +44,30 @@ func _delete_button():
 
 # @name: _check_input
 # @desc: if input is expression, calculate. If error, make red
-func _check_input():
-	var init_node = get_node("Init")
-	var txt = init_node.text
-	var numbers = []
-	var ops = ''
-	var i = 0
-	var max_len = len(txt)
+func _check_input(text, node):
+	var result
+	if text == null:
+		result = _eval(node.text)
+	else:
+		result = _eval(text)
 
-	while i < max_len:
-		var num = ''
-		if txt[i] == '-': # deals with negatives
-			num += txt[i]
-			if i+1 < max_len:
-				 i += 1
+	if result != null:
+		node.text = result
+		node.add_color_override("font_color", Color(1, 1, 1, 0.8)) # white
+	else:
+		node.add_color_override("font_color", Color(1, 0.27, 0, 1)) # red
 
-		while (int(txt[i]) or txt[i] == '0'): # get entire integer
-			num += txt[i]
-			if i < len(txt)-1: 
-				i += 1
-			else: # end of input
-				break
 
-		if len(num) > 0 or txt[i] == '0':
-			numbers.append(int(num))
-		if (txt[i] == '+' or txt[i] == '-') and (numbers.size() > 0):
-			ops += txt[i]
-		elif (txt[i] != ' ') and (txt[i] != '0') and (!int(txt[i])): # invalid character, error
-			init_node.add_color_override("font_color", Color(1, 0.27, 0, 1))
-			return
-		i += 1
-	# -- end while
-	#print(numbers)
-	if ops == '+':
-		init_node.text = String(numbers[0] + numbers[1])
-	elif ops == '-' and numbers.size() > 1:
-		init_node.text = String(numbers[0] - numbers[1])
-	init_node.add_color_override("font_color", Color(1, 1, 1, 0.8))
+# @name: _eval
+# @desc: evaluates expression
+# @param: command: string to be evaluated
+# @return: null if error, result otherwise
+func _eval(command):
+	var error = expression.parse(command, [])
+	if error != OK:
+		print(expression.get_error_text())
+		return null
+	var result = expression.execute([], null, true) # need to check if failed
+	if not expression.has_execute_failed():
+		return str(result)
+	return null

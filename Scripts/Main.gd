@@ -73,9 +73,7 @@ func _new_character():
 	row.get_node("Char/Buttons/ButtonUp").connect("button_down", self, "_move_up", [row])
 	row.get_node("Char/Buttons/ButtonDown").connect("button_down", self, "_move_down", [row])
 	row.connect("tree_exiting", self, "_row_deleted")
-
-	if numRows == 1:
-		row.get_node("Labels").show()
+	_set_char_info(row)
 
 
 # @name: _move_up
@@ -120,14 +118,7 @@ func _move_down(row):
 func _row_deleted():
 	numRows -= 1
 	_set_order_numbers()
-	if numRows > 0:
-		var nodes = get_tree().get_nodes_in_group("Rows")
-		for n in nodes:
-			print("ordernum: " + String(n.orderNum))
-			if n.orderNum == 1:
-				n.get_node("Labels").show()
-	
-	print("num rows: " + String(numRows))
+	#print("num rows: " + String(numRows))
 
 # @name: _sort_characters
 # @param: type of sort - either "sort_order" or "sort_val"
@@ -142,11 +133,11 @@ func _sort_characters(sort_type):
 		i.queue_free()
 
 	var parent = get_node("VBoxContainer")
+	numRows = newNodes.size()
+	
 	for i in newNodes: # add sorted nodes to scene
 		parent.add_child(i)
-		numRows += 1
-		if numRows == 1:
-			i.get_node("Labels").show()
+		_set_char_info(i)
 	
 	_test_integers(newNodes) # checks if Init is integer
 
@@ -196,3 +187,27 @@ func _set_order_numbers():
 		i.orderNum = num
 		num += 1
 
+# @name: _set_char_info
+# @desc: sets LineEdits in a row to visible or not based on Menu selection
+func _set_char_info(row):
+	var menu = get_node("VBoxContainer/Menu")
+	
+	if !menu.nameVisible:
+		row.get_node("Char/Character/Name").hide()
+	else:
+		row.get_node("Char/Character/Name").show()
+	
+	if !menu.hpVisible:
+		row.get_node("Char/Character/HP").hide()
+	else:
+		row.get_node("Char/Character/HP").show()
+	
+	if !menu.acVisible:
+		row.get_node("Char/Character/AC").hide()
+	else:
+		row.get_node("Char/Character/AC").show()
+	
+	if !menu.infoVisible:
+		row.get_node("Char/Character/Info").hide()
+	else:
+		row.get_node("Char/Character/Info").show()

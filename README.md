@@ -12,6 +12,12 @@ You can save an encounter by going to File->Save, then typing a name for the sav
 In order to load the encounter, go to File->Load and select the save file that was previously created.
 
 
+### Download
+Download for Windows:
+https://github.com/kellcj2/Initiative-Tracker/releases/download/v1.0/InitTracker1.0_Windows.zip
+
+Download for Linux:
+https://github.com/kellcj2/Initiative-Tracker/releases/download/v1.0/InitTracker1.0_Linux.zip
 
 
 Made using Godot Engine (v3.2.2)
